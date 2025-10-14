@@ -1,4 +1,4 @@
-package com.marco.awesomepizza.api.model;
+package com.marco.awesomepizza.menu.model;
 
 import java.io.Serializable;
 import java.util.List;

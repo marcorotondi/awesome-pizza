@@ -1,7 +1,7 @@
-package com.marco.awesomepizza.api;
+package com.marco.awesomepizza.menu.controller;
 
-import com.marco.awesomepizza.api.model.Pizza;
-import com.marco.awesomepizza.api.service.MenuService;
+import com.marco.awesomepizza.menu.model.Pizza;
+import com.marco.awesomepizza.menu.service.MenuService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

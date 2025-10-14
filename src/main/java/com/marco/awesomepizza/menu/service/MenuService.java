@@ -1,14 +1,14 @@
-package com.marco.awesomepizza.api.service;
+package com.marco.awesomepizza.menu.service;
 
-import com.marco.awesomepizza.api.model.Ingredient;
-import com.marco.awesomepizza.api.model.Pizza;
+import com.marco.awesomepizza.menu.model.Ingredient;
+import com.marco.awesomepizza.menu.model.Pizza;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 
 import java.io.Serializable;
 import java.util.List;
 
-import static com.marco.awesomepizza.api.model.Ingredient.*;
+import static com.marco.awesomepizza.menu.model.Ingredient.*;
 
 @Service
 public record MenuService() implements Serializable {

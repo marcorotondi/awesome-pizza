@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: awesome-pizza
+  datasource:
+    url: jdbc:h2:file:~/storage/awesome-pizza
+    username: pizza
+    password: pizza
+    driver-class-name: org.h2.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect

@@ -1,4 +1,4 @@
-package com.marco.awesomepizza.api.model;
+package com.marco.awesomepizza.menu.model;
 
 public enum Ingredient {
     FORMAGGIO,

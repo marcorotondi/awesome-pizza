@@ -1,7 +1,8 @@
 package com.marco.awesomepizza.api;
 
-import com.marco.awesomepizza.api.model.Pizza;
-import com.marco.awesomepizza.api.service.MenuService;
+import com.marco.awesomepizza.menu.controller.MenuController;
+import com.marco.awesomepizza.menu.model.Pizza;
+import com.marco.awesomepizza.menu.service.MenuService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
