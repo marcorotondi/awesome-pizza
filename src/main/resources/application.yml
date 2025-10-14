@@ -2,9 +2,13 @@ spring:
   application:
     name: awesome-pizza
   datasource:
-    url: jdbc:h2:file:~/storage/awesome-pizza
+    url: jdbc:h2:file:~/storage/h2/awesome-pizza;AUTO_SERVER=TRUE
     username: pizza
     password: pizza
     driver-class-name: org.h2.Driver
   jpa:
     database-platform: org.hibernate.dialect.H2Dialect
+
+  liquibase:
+    default-schema: pizza
+    liquibase-schema: public
