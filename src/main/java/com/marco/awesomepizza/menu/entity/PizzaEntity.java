@@ -28,17 +28,20 @@ public class PizzaEntity implements Serializable {
     @Column(name = "price")
     private BigDecimal price;
 
-    @OneToMany(mappedBy = "pizza", cascade = CascadeType.ALL, orphanRemoval = true)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinTable(schema = "pizza", name = "pizza_ingredients",
+            joinColumns = @JoinColumn(name = "pizza_entity_id"),
+            inverseJoinColumns = @JoinColumn(name = "ingredients_id"))
     private Set<IngredientEntity> ingredients = new HashSet<>();
 
     public void addIngredient(IngredientEntity ingredient) {
         this.ingredients.add(ingredient);
-        ingredient.setPizza(this);
+        ingredient.getPosts().add(this);
     }
 
     public void removeIngredient(IngredientEntity ingredient) {
         this.ingredients.remove(ingredient);
-        ingredient.setPizza(null);
+        ingredient.getPosts().remove(this);
     }
 
     @Override

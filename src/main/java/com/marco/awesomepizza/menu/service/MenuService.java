@@ -19,7 +19,7 @@ public class MenuService implements Serializable {
 
     @Transactional
     public Flux<Pizza> getPizzas() {
-        var pizzas = pizzaRepository.loadPizzas();
+        var pizzas = pizzaRepository.findAllPizzas();
         return Flux.fromIterable(pizzas)
                 .mapNotNull(Pizza::of);
     }

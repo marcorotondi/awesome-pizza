@@ -11,7 +11,7 @@ import java.util.List;
 public interface PizzaRepository extends JpaRepository<PizzaEntity, Long> {
 
     @Query("""
-                SELECT p from PizzaEntity p JOIN FETCH p.ingredients
+            SELECT p FROM PizzaEntity p JOIN FETCH p.ingredients order by p.id
             """)
-    List<PizzaEntity> loadPizzas();
+    List<PizzaEntity> findAllPizzas();
 }

@@ -6,7 +6,9 @@ import lombok.Setter;
 import org.hibernate.proxy.HibernateProxy;
 
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 import java.util.StringJoiner;
 
 @Getter
@@ -22,8 +24,8 @@ public class IngredientEntity implements Serializable {
     @Column(name = "name")
     private String name;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    private PizzaEntity pizza;
+    @ManyToMany(mappedBy = "ingredients", fetch = FetchType.LAZY)
+    private Set<PizzaEntity> posts = new HashSet<>();
 
     @Override
     public final boolean equals(Object o) {
