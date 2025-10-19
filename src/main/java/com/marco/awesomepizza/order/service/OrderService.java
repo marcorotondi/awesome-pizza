@@ -8,6 +8,7 @@ import com.marco.awesomepizza.order.repository.OrderRepository;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
@@ -25,13 +26,16 @@ public class OrderService {
         this.pizzaRepository = pizzaRepository;
     }
 
+    @Transactional
     public Mono<Order> createOrder(@NotNull @NotEmpty List<Pizza> pizzas) {
         var pizzaToOrders = pizzas.stream().map(Pizza::code).toList();
         var allPizzaEntity = pizzaRepository.findAllById(pizzaToOrders);
         var newOrder = OrderEntity.of(allPizzaEntity);
 
-        orderRepository.save(newOrder);
-        return Mono.just(Order.of(newOrder));
+        return Mono.fromCallable(() -> {
+            OrderEntity savedOrder = orderRepository.save(newOrder);
+            return Order.of(savedOrder);
+        });
     }
 
     public Mono<Order> getOrder(String orderCode) {
