@@ -34,16 +34,6 @@ public class PizzaEntity implements Serializable {
             inverseJoinColumns = @JoinColumn(name = "ingredients_id"))
     private Set<IngredientEntity> ingredients = new HashSet<>();
 
-    public void addIngredient(IngredientEntity ingredient) {
-        this.ingredients.add(ingredient);
-        ingredient.getPosts().add(this);
-    }
-
-    public void removeIngredient(IngredientEntity ingredient) {
-        this.ingredients.remove(ingredient);
-        ingredient.getPosts().remove(this);
-    }
-
     @Override
     public final boolean equals(Object o) {
         if (this == o) return true;

@@ -16,6 +16,7 @@ public class SecurityConfig {
                 .authorizeExchange((exchanges) ->
                         exchanges
                                 .pathMatchers("/api/v1/menu/**").permitAll()
+                                .pathMatchers("/api/v1/orders/**").permitAll()
                                 .anyExchange().
                                 denyAll()
                 )
