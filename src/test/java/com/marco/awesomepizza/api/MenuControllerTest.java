@@ -1,8 +1,8 @@
 package com.marco.awesomepizza.api;
 
 import com.marco.awesomepizza.menu.controller.MenuController;
-import com.marco.awesomepizza.menu.model.Pizza;
 import com.marco.awesomepizza.menu.service.MenuService;
+import com.marco.awesomepizza.model.Pizza;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -14,6 +14,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Flux;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import static org.mockito.Mockito.when;
@@ -31,7 +32,7 @@ class MenuControllerTest {
 
     @Test
     void getPizzas() {
-        var margherita = new Pizza(1L, "Margherita", List.of("Formaggio", "Pomodoro", "Basilico"));
+        var margherita = new Pizza(1L, "Margherita", BigDecimal.valueOf(6.00), List.of("Formaggio", "Pomodoro", "Basilico"));
 
         when(menuService.getPizzas()).thenReturn(Flux.just(margherita));
 

@@ -14,7 +14,7 @@ public interface OrderRepository extends JpaRepository<OrderEntity, Long> {
     @Query("""
                 SELECT o from OrderEntity o
                     JOIN FETCH o.pizzas p
-                WHERE o.orderCode = :orderCode
+                WHERE o.id = :orderId
             """)
-    Optional<OrderEntity> findByOrderCode(@Param("orderCode") String orderCode);
+    Optional<OrderEntity> findByOrderCode(@Param("orderId") Long orderId);
 }

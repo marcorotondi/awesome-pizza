@@ -1,9 +1,9 @@
 package com.marco.awesomepizza.order.service;
 
-import com.marco.awesomepizza.menu.model.Pizza;
 import com.marco.awesomepizza.menu.repository.PizzaRepository;
+import com.marco.awesomepizza.model.Order;
+import com.marco.awesomepizza.model.Pizza;
 import com.marco.awesomepizza.order.entity.OrderEntity;
-import com.marco.awesomepizza.order.model.Order;
 import com.marco.awesomepizza.order.repository.OrderRepository;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -32,14 +32,13 @@ public class OrderService {
         var allPizzaEntity = pizzaRepository.findAllById(pizzaToOrders);
         var newOrder = OrderEntity.of(allPizzaEntity);
 
-        return Mono.fromCallable(() -> {
-            OrderEntity savedOrder = orderRepository.save(newOrder);
-            return Order.of(savedOrder);
-        });
+        OrderEntity savedOrder = orderRepository.save(newOrder);
+        return Mono.just(Order.of(savedOrder));
     }
 
-    public Mono<Order> getOrder(String orderCode) {
-        var optionalOrder = orderRepository.findByOrderCode(orderCode);
+    @Transactional
+    public Mono<Order> getOrder(Long orderId) {
+        var optionalOrder = orderRepository.findByOrderCode(orderId);
 
         return optionalOrder
                 .map(orderEntity -> Mono.just(Order.of(orderEntity)))

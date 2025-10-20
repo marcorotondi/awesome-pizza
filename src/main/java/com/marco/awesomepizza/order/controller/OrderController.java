@@ -1,7 +1,7 @@
 package com.marco.awesomepizza.order.controller;
 
-import com.marco.awesomepizza.menu.model.Pizza;
-import com.marco.awesomepizza.order.model.Order;
+import com.marco.awesomepizza.model.Order;
+import com.marco.awesomepizza.model.Pizza;
 import com.marco.awesomepizza.order.service.OrderService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
@@ -28,7 +28,7 @@ public class OrderController implements Serializable {
     }
 
     @GetMapping("/{orderCode}")
-    public Mono<Order> getOrder(@PathVariable("orderCode") String orderCode) {
+    public Mono<Order> getOrder(@PathVariable("orderCode") Long orderCode) {
         return orderService.getOrder(orderCode);
     }
 }

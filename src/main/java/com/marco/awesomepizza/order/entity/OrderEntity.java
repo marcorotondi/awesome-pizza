@@ -1,7 +1,7 @@
 package com.marco.awesomepizza.order.entity;
 
 import com.marco.awesomepizza.menu.entity.PizzaEntity;
-import com.marco.awesomepizza.order.model.OrderStatus;
+import com.marco.awesomepizza.model.OrderStatus;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -11,7 +11,10 @@ import org.hibernate.proxy.HibernateProxy;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.StringJoiner;
 
 @Entity
 @Table(schema = "pizza", name = "ordini")
@@ -21,8 +24,8 @@ public class OrderEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "order_code")
-    private String orderCode;
+    @Column(name = "id")
+    private Long id;
 
     @Column(name = "total_cost")
     private BigDecimal totalCost;
@@ -34,7 +37,7 @@ public class OrderEntity {
     @Enumerated(EnumType.STRING)
     private OrderStatus status;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(schema = "pizza", name = "order_pizzas",
             joinColumns = @JoinColumn(name = "order_entity_order_code"),
             inverseJoinColumns = @JoinColumn(name = "pizzas_id"))
@@ -42,7 +45,6 @@ public class OrderEntity {
 
     public static OrderEntity of(@NotNull @NotEmpty List<PizzaEntity> pizzas) {
         var orderEntity = new OrderEntity();
-        orderEntity.setOrderCode(UUID.randomUUID().toString());
         orderEntity.setTotalCost(pizzas.stream().map(PizzaEntity::getPrice).reduce(BigDecimal.ZERO, BigDecimal::add));
         orderEntity.setCreateAt(LocalDateTime.now());
         orderEntity.setStatus(OrderStatus.RECEIVED);
@@ -59,18 +61,18 @@ public class OrderEntity {
         Class<?> thisEffectiveClass = this instanceof HibernateProxy hp ? hp.getHibernateLazyInitializer().getPersistentClass() : this.getClass();
         if (thisEffectiveClass != oEffectiveClass) return false;
         OrderEntity that = (OrderEntity) o;
-        return getOrderCode() != null && Objects.equals(getOrderCode(), that.getOrderCode());
+        return getId() != null && Objects.equals(getId(), that.getId());
     }
 
     @Override
     public final int hashCode() {
-        return Objects.hash(orderCode);
+        return Objects.hash(id);
     }
 
     @Override
     public String toString() {
         return new StringJoiner(", ", OrderEntity.class.getSimpleName() + "[", "]")
-                .add("orderCode='" + orderCode + "'")
+                .add("orderId='" + id + "'")
                 .add("createAt=" + createAt)
                 .add("status=" + status)
                 .toString();

@@ -5,10 +5,20 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.31.xsd"
         objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
-    <changeSet id="1760907958929-1" author="rot">
+    <changeSet id="1760941451075-1" author="rot">
+        <createTable schemaName="pizza" tableName="order_pizzas">
+            <column name="order_entity_order_code" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="pizzas_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1760941451075-2" author="rot">
         <createTable schemaName="pizza" tableName="ordini">
-            <column name="order_code" type="VARCHAR(255)">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_order"/>
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_ordini"/>
             </column>
             <column name="total_cost" type="DECIMAL"/>
             <column name="create_at" type="DATETIME"/>
@@ -17,27 +27,13 @@
             </column>
         </createTable>
     </changeSet>
-    <changeSet id="1760907958929-2" author="rot">
-        <createTable schemaName="pizza" tableName="order_pizzas">
-            <column name="order_entity_order_code" type="VARCHAR(255)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="pizzas_id" type="BIGINT">
-                <constraints nullable="false"/>
-            </column>
-        </createTable>
-    </changeSet>
-    <changeSet id="1760907958929-3" author="rot">
-        <addUniqueConstraint columnNames="pizzas_id" constraintName="uc_order_pizzas_pizzas" schemaName="pizza"
-                             tableName="order_pizzas"/>
-    </changeSet>
-    <changeSet id="1760907958929-4" author="rot">
+    <changeSet id="1760941451075-3" author="rot">
         <addForeignKeyConstraint baseColumnNames="order_entity_order_code" baseTableName="order_pizzas"
                                  baseTableSchemaName="pizza" constraintName="fk_ordpiz_on_order_entity"
-                                 referencedColumnNames="order_code" referencedTableName="ordini"
+                                 referencedColumnNames="id" referencedTableName="ordini"
                                  referencedTableSchemaName="pizza"/>
     </changeSet>
-    <changeSet id="1760907958929-5" author="rot">
+    <changeSet id="1760941451075-4" author="rot">
         <addForeignKeyConstraint baseColumnNames="pizzas_id" baseTableName="order_pizzas" baseTableSchemaName="pizza"
                                  constraintName="fk_ordpiz_on_pizza_entity" referencedColumnNames="id"
                                  referencedTableName="pizza" referencedTableSchemaName="pizza"/>

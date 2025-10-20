@@ -1,8 +1,8 @@
 package com.marco.awesomepizza.order.controller;
 
-import com.marco.awesomepizza.menu.model.Pizza;
-import com.marco.awesomepizza.order.model.Order;
-import com.marco.awesomepizza.order.model.OrderStatus;
+import com.marco.awesomepizza.model.Order;
+import com.marco.awesomepizza.model.OrderStatus;
+import com.marco.awesomepizza.model.Pizza;
 import com.marco.awesomepizza.order.service.OrderService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,7 +19,6 @@ import reactor.core.publisher.Mono;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.UUID;
 
 import static org.mockito.Mockito.when;
 
@@ -36,11 +35,9 @@ class OrderControllerTest {
 
     @Test
     void createOrder() {
-        var orderId = UUID.randomUUID().toString();
-
-        List<Pizza> pizzas = List.of(new Pizza(1L, "Margherita", List.of("Pomodoro", "Formaggio")));
+        List<Pizza> pizzas = List.of(new Pizza(1L, "Margherita", BigDecimal.valueOf(6.00), List.of("Pomodoro", "Formaggio")));
         var expectedOrder = new Order(
-                orderId,
+                null,
                 pizzas,
                 OrderStatus.RECEIVED,
                 new BigDecimal("6.00"),
@@ -63,11 +60,10 @@ class OrderControllerTest {
 
     @Test
     void order_without_pizza() {
-        var orderId = UUID.randomUUID().toString();
-        List<Pizza> pizzas = List.of(new Pizza(1L, "Margherita", List.of("Pomodoro", "Formaggio")));
+        List<Pizza> pizzas = List.of(new Pizza(1L, "Margherita", BigDecimal.valueOf(6.00), List.of("Pomodoro", "Formaggio")));
 
         var expectedOrder = new Order(
-                orderId,
+                null,
                 pizzas,
                 OrderStatus.RECEIVED,
                 new BigDecimal("6.00"),
@@ -86,19 +82,18 @@ class OrderControllerTest {
 
     @Test
     void getOrder() {
-        var orderId = UUID.randomUUID().toString();
         var expectedOrder = new Order(
-                orderId,
-                List.of(new Pizza(1L, "Margherita", List.of("Pomodoro", "Formaggio"))),
+                1L,
+                List.of(new Pizza(1L, "Margherita", BigDecimal.valueOf(6.00), List.of("Pomodoro", "Formaggio"))),
                 OrderStatus.RECEIVED,
                 new BigDecimal("6.00"),
                 LocalDateTime.of(2025, 10, 10, 10, 10, 0)
         );
 
-        when(orderService.getOrder(orderId)).thenReturn(Mono.just(expectedOrder));
+        when(orderService.getOrder(1L).thenReturn(Mono.just(expectedOrder)));
 
         webTestClient.get()
-                .uri("/api/v1/orders/" + orderId)
+                .uri("/api/v1/orders/" + 1)
                 .exchange()
                 .expectStatus()
                 .isOk()
