@@ -1,8 +1,8 @@
 package com.marco.awesomepizza.order.controller;
 
-import com.marco.awesomepizza.model.Order;
-import com.marco.awesomepizza.model.OrderStatus;
-import com.marco.awesomepizza.model.Pizza;
+import com.marco.awesomepizza.menu.model.Pizza;
+import com.marco.awesomepizza.order.model.Order;
+import com.marco.awesomepizza.order.model.OrderStatus;
 import com.marco.awesomepizza.order.service.OrderService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

@@ -1,7 +1,7 @@
 package com.marco.awesomepizza.order.entity;
 
 import com.marco.awesomepizza.menu.entity.PizzaEntity;
-import com.marco.awesomepizza.model.OrderStatus;
+import com.marco.awesomepizza.order.model.OrderStatus;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;

@@ -1,4 +1,4 @@
-package com.marco.awesomepizza.model;
+package com.marco.awesomepizza.order.model;
 
 public enum OrderStatus {
     RECEIVED,

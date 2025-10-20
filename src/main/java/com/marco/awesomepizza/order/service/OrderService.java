@@ -1,9 +1,9 @@
 package com.marco.awesomepizza.order.service;
 
+import com.marco.awesomepizza.menu.model.Pizza;
 import com.marco.awesomepizza.menu.repository.PizzaRepository;
-import com.marco.awesomepizza.model.Order;
-import com.marco.awesomepizza.model.Pizza;
 import com.marco.awesomepizza.order.entity.OrderEntity;
+import com.marco.awesomepizza.order.model.Order;
 import com.marco.awesomepizza.order.repository.OrderRepository;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;

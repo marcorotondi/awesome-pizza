@@ -1,7 +1,7 @@
 package com.marco.awesomepizza.menu.service;
 
+import com.marco.awesomepizza.menu.model.Pizza;
 import com.marco.awesomepizza.menu.repository.PizzaRepository;
-import com.marco.awesomepizza.model.Pizza;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Flux;

@@ -1,4 +1,4 @@
-package com.marco.awesomepizza.model;
+package com.marco.awesomepizza.menu.model;
 
 import com.marco.awesomepizza.menu.entity.IngredientEntity;
 import com.marco.awesomepizza.menu.entity.PizzaEntity;

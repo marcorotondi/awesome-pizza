@@ -1,5 +1,6 @@
-package com.marco.awesomepizza.model;
+package com.marco.awesomepizza.order.model;
 
+import com.marco.awesomepizza.menu.model.Pizza;
 import com.marco.awesomepizza.order.entity.OrderEntity;
 
 import java.io.Serializable;
