@@ -60,16 +60,6 @@ class OrderControllerTest {
 
     @Test
     void order_without_pizza() {
-        List<Pizza> pizzas = List.of(new Pizza(1L, "Margherita", BigDecimal.valueOf(6.00), List.of("Pomodoro", "Formaggio")));
-
-        var expectedOrder = new Order(
-                null,
-                pizzas,
-                OrderStatus.RECEIVED,
-                new BigDecimal("6.00"),
-                LocalDateTime.of(2025, 10, 10, 10, 10, 0)
-        );
-
         webTestClient.post()
                 .uri("/api/v1/orders/create")
                 .body(Mono.just(List.of()), new ParameterizedTypeReference<List<Pizza>>() {
@@ -90,7 +80,7 @@ class OrderControllerTest {
                 LocalDateTime.of(2025, 10, 10, 10, 10, 0)
         );
 
-        when(orderService.getOrder(1L).thenReturn(Mono.just(expectedOrder)));
+        when(orderService.getOrder(1L)).thenReturn(Mono.just(expectedOrder));
 
         webTestClient.get()
                 .uri("/api/v1/orders/" + 1)
@@ -99,6 +89,5 @@ class OrderControllerTest {
                 .isOk()
                 .expectBody(Order.class)
                 .isEqualTo(expectedOrder);
-
     }
 }
