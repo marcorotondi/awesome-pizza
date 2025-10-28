@@ -10,6 +10,7 @@ import jakarta.validation.constraints.NotNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Mono;
+import reactor.core.scheduler.Schedulers;
 
 import java.util.List;
 
@@ -28,20 +29,30 @@ public class OrderService {
 
     @Transactional
     public Mono<Order> createOrder(@NotNull @NotEmpty List<Pizza> pizzas) {
-        var pizzaToOrders = pizzas.stream().map(Pizza::code).toList();
-        var allPizzaEntity = pizzaRepository.findAllById(pizzaToOrders);
-        var newOrder = OrderEntity.of(allPizzaEntity);
+        return Mono.fromCallable(() -> {
+                    var pizzaToOrders = pizzas.stream().map(Pizza::code).toList();
+                    var allPizzaEntity = pizzaRepository.findAllById(pizzaToOrders);
+                    // Validate all pizzas exist
+                    if (allPizzaEntity.size() != pizzaToOrders.size()) {
+                        throw new IllegalArgumentException(
+                                "Some pizzas not found. Requested: " + pizzaToOrders.size() +
+                                ", Found: " + allPizzaEntity.size());
+                    }
 
-        OrderEntity savedOrder = orderRepository.save(newOrder);
-        return Mono.just(Order.of(savedOrder));
+                    var newOrder = OrderEntity.of(allPizzaEntity);
+                    OrderEntity savedOrder = orderRepository.save(newOrder);
+                    return Order.of(savedOrder);
+                }).subscribeOn(Schedulers.boundedElastic())
+                .onErrorMap(e -> new RuntimeException("Failed to create order", e));
     }
 
     @Transactional
     public Mono<Order> getOrder(Long orderId) {
-        var optionalOrder = orderRepository.findByOrderCode(orderId);
-
-        return optionalOrder
-                .map(orderEntity -> Mono.just(Order.of(orderEntity)))
-                .orElse(Mono.empty());
+        return Mono.fromCallable(() ->
+                        orderRepository.findByOrderCode(orderId)
+                                .map(Order::of)
+                                .orElse(null))
+                .subscribeOn(Schedulers.boundedElastic())
+                .onErrorMap(e -> new RuntimeException("Failed to get order", e));
     }
 }
