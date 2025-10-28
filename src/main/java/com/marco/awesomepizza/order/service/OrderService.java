@@ -57,6 +57,9 @@ public class OrderService {
     }
 
     public Mono<OrderEntity> getOrderToProcessing() {
-        return Mono.empty();
+        return Mono.fromCallable(orderRepository::findOrderToProcess)
+                .flatMap(optional -> optional.map(Mono::just)
+                        .orElseGet(Mono::empty)
+                );
     }
 }

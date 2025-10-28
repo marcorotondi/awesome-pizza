@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
 import java.time.Duration;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 @Service
 @Slf4j
@@ -15,34 +16,40 @@ public class PizzaChefWorker {
 
     private final OrderService orderService;
 
+    private final AtomicBoolean isProcessing = new AtomicBoolean(false);
+
     public PizzaChefWorker(OrderService orderService) {
         this.orderService = orderService;
     }
 
     @Scheduled(fixedRate = 1000)
     public void doPizza() {
+
+        if (!isProcessing.compareAndSet(false, true)) {
+            log.debug("Already processing an order, skipping this execution");
+            return;
+        }
         orderService.getOrderToProcessing()
                 .switchIfEmpty(Mono.defer(() -> Mono.error(new OrderNotFoundException("No order to processing!"))))
-                .mapNotNull(this::preparePizza)
-                .delayElement(Duration.ofMinutes(1))
+                .mapNotNull(this::prepareOrder)
+                .delayElement(Duration.ofSeconds(20))
                 .mapNotNull(this::cooking)
-                .delayElement(Duration.ofMinutes(1))
+                .delayElement(Duration.ofSeconds(10))
                 .onErrorComplete(this::logOrderProcessingError)
-                .doOnNext(this::completeOrder)
-                .subscribe();
+                .subscribe(this::completeOrder);
     }
 
-    private OrderEntity preparePizza(OrderEntity orderEntity) {
+    private OrderEntity prepareOrder(OrderEntity orderEntity) {
         log.info("Preparing order {}", orderEntity.getId());
 
 
-        return null;
+        return orderEntity;
     }
 
     private OrderEntity cooking(OrderEntity orderEntity) {
         log.info("Cooking order {}", orderEntity.getId());
 
-        return null;
+        return orderEntity;
     }
 
     private void completeOrder(OrderEntity orderEntity) {
