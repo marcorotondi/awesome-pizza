@@ -55,4 +55,8 @@ public class OrderService {
                 .subscribeOn(Schedulers.boundedElastic())
                 .onErrorMap(e -> new RuntimeException("Failed to get order", e));
     }
+
+    public Mono<OrderEntity> getOrderToProcessing() {
+        return Mono.empty();
+    }
 }
