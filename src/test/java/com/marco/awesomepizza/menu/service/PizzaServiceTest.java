@@ -11,22 +11,22 @@ import reactor.test.StepVerifier;
 
 @ExtendWith({SpringExtension.class})
 @DataJpaTest
-class MenuServiceTest {
+class PizzaServiceTest {
 
     @Autowired
     private PizzaRepository pizzaRepository;
 
-    private MenuService menuService;
+    private PizzaService pizzaService;
 
     @BeforeEach
     void setUp() {
-        menuService = new MenuService(pizzaRepository);
+        pizzaService = new PizzaService(pizzaRepository);
     }
 
     @Test
     void getPizzas() {
 
-        var pizzas = menuService.getPizzas();
+        var pizzas = pizzaService.getPizzas();
 
         StepVerifier.create(pizzas)
                 .expectNextCount(14)

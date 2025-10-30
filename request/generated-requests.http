@@ -17,6 +17,17 @@ Content-Type: application/json
       "Basilico",
       "Olio d’oliva"
     ]
+  },
+  {
+    "code": 5,
+    "name": "Tonno",
+    "price": "7.50",
+    "ingredients": [
+      "Mozzarella",
+      "Pomodoro",
+      "Basilico",
+      "Tonno"
+    ]
   }
 ]
 

@@ -2,7 +2,7 @@ package com.marco.awesomepizza.api;
 
 import com.marco.awesomepizza.menu.controller.MenuController;
 import com.marco.awesomepizza.menu.model.Pizza;
-import com.marco.awesomepizza.menu.service.MenuService;
+import com.marco.awesomepizza.menu.service.PizzaService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -25,7 +25,7 @@ import static org.mockito.Mockito.when;
 class MenuControllerTest {
 
     @MockitoBean
-    private MenuService menuService;
+    private PizzaService pizzaService;
 
     @Autowired
     private WebTestClient webTestClient;
@@ -34,7 +34,7 @@ class MenuControllerTest {
     void getPizzas() {
         var margherita = new Pizza(1L, "Margherita", BigDecimal.valueOf(6.00), List.of("Formaggio", "Pomodoro", "Basilico"));
 
-        when(menuService.getPizzas()).thenReturn(Flux.just(margherita));
+        when(pizzaService.getPizzas()).thenReturn(Flux.just(margherita));
 
         webTestClient
                 .get()

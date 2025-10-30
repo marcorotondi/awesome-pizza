@@ -14,4 +14,12 @@ public interface PizzaRepository extends JpaRepository<PizzaEntity, Long> {
             SELECT p FROM PizzaEntity p JOIN FETCH p.ingredients order by p.id
             """)
     List<PizzaEntity> findAllPizzas();
+
+
+    @Query("""
+            SELECT DISTINCT p FROM PizzaEntity p
+            LEFT JOIN FETCH p.ingredients 
+            WHERE p.id IN :ids
+            """)
+    List<PizzaEntity> findAllByIdWithIngredients(List<Long> ids);
 }

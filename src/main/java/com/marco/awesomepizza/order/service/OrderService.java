@@ -1,9 +1,10 @@
 package com.marco.awesomepizza.order.service;
 
 import com.marco.awesomepizza.menu.model.Pizza;
-import com.marco.awesomepizza.menu.repository.PizzaRepository;
+import com.marco.awesomepizza.menu.service.PizzaService;
 import com.marco.awesomepizza.order.entity.OrderEntity;
 import com.marco.awesomepizza.order.model.Order;
+import com.marco.awesomepizza.order.model.OrderStatus;
 import com.marco.awesomepizza.order.repository.OrderRepository;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -19,19 +20,18 @@ public class OrderService {
 
     private final OrderRepository orderRepository;
 
-    private final PizzaRepository pizzaRepository;
+    private final PizzaService pizzaService;
 
     public OrderService(OrderRepository orderRepository,
-                        PizzaRepository pizzaRepository) {
+                        PizzaService pizzaService) {
         this.orderRepository = orderRepository;
-        this.pizzaRepository = pizzaRepository;
+        this.pizzaService = pizzaService;
     }
 
-    @Transactional
     public Mono<Order> createOrder(@NotNull @NotEmpty List<Pizza> pizzas) {
         return Mono.fromCallable(() -> {
                     var pizzaToOrders = pizzas.stream().map(Pizza::code).toList();
-                    var allPizzaEntity = pizzaRepository.findAllById(pizzaToOrders);
+                    var allPizzaEntity = pizzaService.findPizzaById(pizzaToOrders);
                     // Validate all pizzas exist
                     if (allPizzaEntity.size() != pizzaToOrders.size()) {
                         throw new IllegalArgumentException(
@@ -42,11 +42,11 @@ public class OrderService {
                     var newOrder = OrderEntity.of(allPizzaEntity);
                     OrderEntity savedOrder = orderRepository.save(newOrder);
                     return Order.of(savedOrder);
-                }).subscribeOn(Schedulers.boundedElastic())
+                })
+                .subscribeOn(Schedulers.boundedElastic())
                 .onErrorMap(e -> new RuntimeException("Failed to create order", e));
     }
 
-    @Transactional
     public Mono<Order> getOrder(Long orderId) {
         return Mono.fromCallable(() ->
                         orderRepository.findByOrderCode(orderId)
@@ -61,5 +61,11 @@ public class OrderService {
                 .flatMap(optional -> optional.map(Mono::just)
                         .orElseGet(Mono::empty)
                 );
+    }
+
+    @Transactional
+    public void updateOrder(OrderEntity orderEntity, OrderStatus newStatus) {
+        orderEntity.setStatus(newStatus);
+        orderRepository.save(orderEntity);
     }
 }

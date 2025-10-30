@@ -1,7 +1,7 @@
 package com.marco.awesomepizza.menu.controller;
 
 import com.marco.awesomepizza.menu.model.Pizza;
-import com.marco.awesomepizza.menu.service.MenuService;
+import com.marco.awesomepizza.menu.service.PizzaService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -11,14 +11,14 @@ import reactor.core.publisher.Flux;
 @RequestMapping("/api/v1/menu")
 public class MenuController {
 
-    private final MenuService menuService;
+    private final PizzaService pizzaService;
 
-    public MenuController(MenuService menuService) {
-        this.menuService = menuService;
+    public MenuController(PizzaService pizzaService) {
+        this.pizzaService = pizzaService;
     }
 
     @GetMapping("/pizzas")
     public Flux<Pizza> getPizzas() {
-        return menuService.getPizzas();
+        return pizzaService.getPizzas();
     }
 }

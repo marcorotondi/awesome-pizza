@@ -3,7 +3,7 @@ package com.marco.awesomepizza.order.service;
 import com.marco.awesomepizza.menu.entity.IngredientEntity;
 import com.marco.awesomepizza.menu.entity.PizzaEntity;
 import com.marco.awesomepizza.menu.model.Pizza;
-import com.marco.awesomepizza.menu.repository.PizzaRepository;
+import com.marco.awesomepizza.menu.service.PizzaService;
 import com.marco.awesomepizza.order.entity.OrderEntity;
 import com.marco.awesomepizza.order.model.Order;
 import com.marco.awesomepizza.order.model.OrderStatus;
@@ -33,7 +33,7 @@ class OrderServiceTest {
     private OrderRepository orderRepository;
 
     @MockitoBean
-    private PizzaRepository pizzaRepository;
+    private PizzaService pizzaService;
 
     @Autowired
     private OrderService orderService;
@@ -55,7 +55,7 @@ class OrderServiceTest {
         pizzaEntity.setId(1L);
         pizzaEntity.setName("Pizza Margherita");
         pizzaEntity.setPrice(BigDecimal.valueOf(6.00));
-        pizzaEntity.setIngredients(Set.of(mozzarella, pomodoro));
+        pizzaEntity.setIngredients(Set.of(pomodoro, mozzarella));
 
         OrderEntity orderEntity = new OrderEntity();
         orderEntity.setId(1L);
@@ -66,7 +66,7 @@ class OrderServiceTest {
 
         Mockito.when(orderRepository.save(Mockito.any()))
                 .thenReturn(orderEntity);
-        Mockito.when(pizzaRepository.findAllById(Mockito.any()))
+        Mockito.when(pizzaService.findPizzaById(Mockito.any()))
                 .thenReturn(List.of(pizzaEntity));
 
         var order = orderService.createOrder(List.of(pizza));
@@ -93,7 +93,7 @@ class OrderServiceTest {
         pizzaEntity.setId(1L);
         pizzaEntity.setName("Pizza Margherita");
         pizzaEntity.setPrice(BigDecimal.valueOf(6.00));
-        pizzaEntity.setIngredients(Set.of(mozzarella, pomodoro));
+        pizzaEntity.setIngredients(Set.of(pomodoro, mozzarella));
 
         OrderEntity orderEntity = new OrderEntity();
         orderEntity.setId(1L);

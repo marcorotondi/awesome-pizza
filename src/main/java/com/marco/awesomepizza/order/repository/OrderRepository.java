@@ -19,21 +19,14 @@ public interface OrderRepository extends JpaRepository<OrderEntity, Long> {
             """)
     Optional<OrderEntity> findByOrderCode(@Param("orderId") Long orderId);
 
-    @Query("""
-                SELECT o FROM OrderEntity o
-                        JOIN FETCH o.pizzas p
-                        JOIN FETCH p.ingredients
-                WHERE o.id in (
-                    SELECT pr.id
-                    FROM (
-                        SELECT o1.id as id,
-                        dense_rank() over (
-                                order by o1.createAt ASC
-                        ) as ranking
-                        FROM OrderEntity o1
-                        WHERE o1.status = 'RECEIVED'
-                    ) pr
-                    WHERE pr.ranking = 1
+    @Query(value = """
+                SELECT DISTINCT o
+                FROM OrderEntity o
+                WHERE o.status = 'RECEIVED'
+                AND o.createAt = (
+                    SELECT MIN(o1.createAt)
+                    FROM OrderEntity o1
+                    WHERE o1.status = 'RECEIVED'
                 )
             """)
     Optional<OrderEntity> findOrderToProcess();
