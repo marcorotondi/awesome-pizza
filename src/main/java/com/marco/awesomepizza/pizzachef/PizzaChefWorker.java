@@ -53,6 +53,7 @@ public class PizzaChefWorker {
     }
 
     private void completeOrder(OrderEntity orderEntity) {
+        isProcessing.compareAndSet(true, false);
         log.info("Order {} completed", orderEntity.getId());
     }
 

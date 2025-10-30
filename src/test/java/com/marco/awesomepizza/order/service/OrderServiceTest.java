@@ -41,7 +41,7 @@ class OrderServiceTest {
     @Test
     void createOrder() {
         var createAt = LocalDateTime.of(2025, Month.OCTOBER, 28, 12, 30);
-        Pizza pizza = new Pizza(1L, "Pizza Margherita", BigDecimal.valueOf(6.00), List.of("Pomodoro", "Mozzarella"));
+        Pizza pizza = new Pizza(1L, "Pizza Margherita", BigDecimal.valueOf(6.00), List.of("Mozzarella", "Pomodoro"));
         Order expected = new Order(1L, List.of(pizza), OrderStatus.RECEIVED, BigDecimal.valueOf(6.00), createAt);
 
         var pomodoro = new IngredientEntity();
@@ -55,7 +55,7 @@ class OrderServiceTest {
         pizzaEntity.setId(1L);
         pizzaEntity.setName("Pizza Margherita");
         pizzaEntity.setPrice(BigDecimal.valueOf(6.00));
-        pizzaEntity.setIngredients(Set.of(pomodoro, mozzarella));
+        pizzaEntity.setIngredients(Set.of(mozzarella, pomodoro));
 
         OrderEntity orderEntity = new OrderEntity();
         orderEntity.setId(1L);
@@ -79,7 +79,7 @@ class OrderServiceTest {
     @Test
     void getOrder() {
         var createAt = LocalDateTime.of(2025, Month.OCTOBER, 28, 12, 30);
-        Pizza pizza = new Pizza(1L, "Pizza Margherita", BigDecimal.valueOf(6.00), List.of("Pomodoro", "Mozzarella"));
+        Pizza pizza = new Pizza(1L, "Pizza Margherita", BigDecimal.valueOf(6.00), List.of("Mozzarella", "Pomodoro"));
         Order expected = new Order(1L, List.of(pizza), OrderStatus.RECEIVED, BigDecimal.valueOf(6.00), createAt);
 
         var pomodoro = new IngredientEntity();
@@ -93,7 +93,7 @@ class OrderServiceTest {
         pizzaEntity.setId(1L);
         pizzaEntity.setName("Pizza Margherita");
         pizzaEntity.setPrice(BigDecimal.valueOf(6.00));
-        pizzaEntity.setIngredients(Set.of(pomodoro, mozzarella));
+        pizzaEntity.setIngredients(Set.of(mozzarella, pomodoro));
 
         OrderEntity orderEntity = new OrderEntity();
         orderEntity.setId(1L);
