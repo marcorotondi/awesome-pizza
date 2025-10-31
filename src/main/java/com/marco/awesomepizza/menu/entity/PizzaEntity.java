@@ -32,6 +32,7 @@ public class PizzaEntity implements Serializable {
     @JoinTable(schema = "pizza", name = "pizza_ingredients",
             joinColumns = @JoinColumn(name = "pizza_entity_id"),
             inverseJoinColumns = @JoinColumn(name = "ingredients_id"))
+    @OrderColumn(name = "id")
     private Set<IngredientEntity> ingredients = new HashSet<>();
 
     @Override

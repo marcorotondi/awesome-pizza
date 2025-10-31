@@ -40,23 +40,27 @@ public class PizzaChefWorker {
 
         orderService.getOrderToProcessing()
                 .switchIfEmpty(Mono.defer(() -> Mono.error(new OrderNotFoundException("No order to processing!"))))
-                .flatMap(this::prepareOrder)
+                .mapNotNull(this::prepareOrder)
                 .delayElement(Duration.ofSeconds(20))
                 .mapNotNull(this::cooking)
                 .delayElement(Duration.ofSeconds(10))
-                .flatMap(this::completeOrder)
                 .doOnError(this::logOrderProcessingError)
                 .doFinally(_ -> isProcessing.set(false))
-                .subscribe();
+                .subscribe(this::completeOrder);
     }
 
-    private Mono<OrderEntity> prepareOrder(OrderEntity orderEntity) {
-        return orderService.updateOrder(orderEntity, OrderStatus.IN_PREPARATION)
-                .doOnNext(updatedOrder -> log.info("Preparing order {} status: {}", updatedOrder.getId(), updatedOrder.getStatus()))
-                .doOnNext(updatedOrder -> updatedOrder.getPizzas().forEach(pizza -> {
-                    log.info("Prepare pizza: {}", pizza.getName());
-                    pizza.getIngredients().forEach(ingredient -> log.info("Take ingredient: {}", ingredient.getName()));
-                }));
+    private OrderEntity prepareOrder(OrderEntity orderEntity) {
+        orderService.updateOrder(orderEntity, OrderStatus.IN_PREPARATION);
+        log.info("Preparing order {} status: {}", orderEntity.getId(), orderEntity.getStatus());
+
+        orderEntity.getPizzas().forEach(pizza -> {
+            log.info("Prepare pizza: {}", pizza.getName());
+            pizza.getIngredients().forEach(ingredient -> {
+                log.info("Take ingredient: {}", ingredient.getName());
+            });
+        });
+
+        return orderEntity;
     }
 
     private OrderEntity cooking(OrderEntity orderEntity) {
@@ -64,12 +68,10 @@ public class PizzaChefWorker {
         return orderEntity;
     }
 
-    private Mono<OrderEntity> completeOrder(OrderEntity orderEntity) {
-        return orderService.updateOrder(orderEntity, OrderStatus.READY)
-                .doOnNext(updatedOrder -> {
-                    log.info("Order {} completed, status: {}", updatedOrder.getId(), updatedOrder.getStatus());
-                    log.info("\n\n");
-                });
+    private void completeOrder(OrderEntity orderEntity) {
+        orderService.updateOrder(orderEntity, OrderStatus.READY);
+        log.info("Order {} completed, status: {}", orderEntity.getId(), orderEntity.getStatus());
+        log.info("\n\n");
     }
 
     private void logOrderProcessingError(Throwable error) {

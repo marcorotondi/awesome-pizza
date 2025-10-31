@@ -9,6 +9,7 @@ import com.marco.awesomepizza.order.repository.OrderRepository;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
 
@@ -62,11 +63,9 @@ public class OrderService {
                 );
     }
 
-    public Mono<OrderEntity> updateOrder(OrderEntity orderEntity, OrderStatus newStatus) {
-        return Mono.fromCallable(() -> {
-                    orderEntity.setStatus(newStatus);
-                    return orderRepository.save(orderEntity);
-                })
-                .subscribeOn(Schedulers.boundedElastic());
+    @Transactional
+    public OrderEntity updateOrder(OrderEntity orderEntity, OrderStatus newStatus) {
+        orderEntity.setStatus(newStatus);
+        return orderRepository.save(orderEntity);
     }
 }

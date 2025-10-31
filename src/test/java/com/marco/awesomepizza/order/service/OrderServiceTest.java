@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
 import java.math.BigDecimal;
@@ -84,14 +85,14 @@ class OrderServiceTest {
     @Test
     void getOrder() {
         var createAt = LocalDateTime.of(2025, Month.OCTOBER, 28, 12, 30);
-        Pizza pizza = new Pizza(1L, "Pizza Margherita", BigDecimal.valueOf(6.00), List.of("Pomodoro", "Mozzarella"));
+        Pizza pizza = new Pizza(1L, "Pizza Margherita", BigDecimal.valueOf(6.00), List.of("Mozzarella", "Pomodoro"));
         Order expected = new Order(1L, List.of(pizza), OrderStatus.RECEIVED, BigDecimal.valueOf(6.00), createAt);
 
         var pomodoro = new IngredientEntity();
-        pomodoro.setId(1L);
+        pomodoro.setId(2L);
         pomodoro.setName("Pomodoro");
         var mozzarella = new IngredientEntity();
-        mozzarella.setId(2L);
+        mozzarella.setId(1L);
         mozzarella.setName("Mozzarella");
 
         PizzaEntity pizzaEntity = new PizzaEntity();
@@ -179,7 +180,7 @@ class OrderServiceTest {
 
         var result = orderService.updateOrder(orderEntity, OrderStatus.IN_PREPARATION);
 
-        StepVerifier.create(result)
+        StepVerifier.create(Mono.just(result))
                 .expectNextMatches(entity -> entity.getStatus() == OrderStatus.IN_PREPARATION)
                 .verifyComplete();
 
