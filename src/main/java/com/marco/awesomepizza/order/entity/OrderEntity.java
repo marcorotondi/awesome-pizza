@@ -5,7 +5,9 @@ import com.marco.awesomepizza.order.model.OrderStatus;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.proxy.HibernateProxy;
 
@@ -20,6 +22,8 @@ import java.util.StringJoiner;
 @Table(schema = "pizza", name = "ordini")
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class OrderEntity {
 
     @Id
