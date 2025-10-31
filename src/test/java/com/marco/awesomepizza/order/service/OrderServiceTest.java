@@ -22,9 +22,7 @@ import reactor.test.StepVerifier;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.Month;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @ExtendWith({SpringExtension.class, MockitoExtension.class})
 @ContextConfiguration(classes = OrderService.class)
@@ -95,11 +93,15 @@ class OrderServiceTest {
         mozzarella.setId(1L);
         mozzarella.setName("Mozzarella");
 
+        var insgredients = new TreeSet<>(Comparator.comparing(IngredientEntity::getId));
+        insgredients.add(pomodoro);
+        insgredients.add(mozzarella);
+
         PizzaEntity pizzaEntity = new PizzaEntity();
         pizzaEntity.setId(1L);
         pizzaEntity.setName("Pizza Margherita");
         pizzaEntity.setPrice(BigDecimal.valueOf(6.00));
-        pizzaEntity.setIngredients(Set.of(pomodoro, mozzarella));
+        pizzaEntity.setIngredients(insgredients);
 
         OrderEntity orderEntity = new OrderEntity();
         orderEntity.setId(1L);
